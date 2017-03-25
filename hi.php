@@ -5,6 +5,7 @@
 	require_once('util4p/RedisDAO.class.php');
 	require_once('util4p/CRObject.class.php');
 	require_once('PatternManager.class.php');
+	require_once('init.inc.php');
 
 	$ua = cr_get_SERVER('HTTP_USER_AGENT');
 	$refer = cr_get_SERVER('HTTP_REFERER');
@@ -21,17 +22,9 @@
 
 	if(filter_var($refer, FILTER_VALIDATE_URL) === FALSE)
 	{
-  	echo "Not valid url\n";
+  	echo "invalid url\n";
 		exit;
 	}
-
-	$config = new CRObject();
-	$config->set('scheme', 'tcp');
-	$config->set('host', '192.168.56.110');
-	$config->set('port', '6379');
-	RedisDAO::configure($config);
-
-
 
 	$arr = parse_url($refer);
 
@@ -77,7 +70,3 @@
 		$json = $_GET['callback'].'('.$json.')';
 	}
 	echo $json;
-
-
-
-?>
