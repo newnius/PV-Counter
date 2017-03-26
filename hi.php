@@ -51,7 +51,7 @@
 		$page = $arr['path'].'?';
 		$page .= http_build_query($tmp_arr);
 	}else{
-		$page = $arr['path'].'?'.$arr['query'];
+		$page = $arr['path'];
 	}
 	
 	$redis = RedisDAO::instance();

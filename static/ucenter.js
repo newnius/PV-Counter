@@ -19,7 +19,7 @@ $(function(){
     case "patterns":
 			var site = getParameterByName('site');
       load_patterns(site);
-      register_events_pattern();
+      register_events_pattern(site);
       break;
     case "changepwd":
       register_events_user();

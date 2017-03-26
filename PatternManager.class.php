@@ -9,7 +9,7 @@
 		/* pattern sample: /view.php?id=? */
 		public static function save($site, $pattern){
 			$arr = parse_url('http://example.com'.$pattern);
-			var_dump($arr);
+			//var_dump($arr);
 			if(!isset($arr['path']))return 0;// must set
 			if(!isset($arr['query']))return 0;// no need to add pattern
 			$redis = RedisDAO::instance();

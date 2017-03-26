@@ -11,10 +11,7 @@
   $page_type = 'home';
   $username = Session::get('username');
 
-  if(isset($_GET['profile'])){
-    $page_type='profile';
-  
-  }elseif(isset($_GET['changepwd'])){
+  if(isset($_GET['changepwd'])){
     $page_type='changepwd';
   
   }elseif(isset($_GET['users'])){
@@ -43,14 +40,12 @@
 
 
   $entries = array(
-    array('home', '个人首页'),
-    array('profile', '用户信息'),
-    array('changepwd', '修改密码'),
-    array('logs', '登录日志'),
-    array('sites', '网站管理'),
-    array('patterns', 'Patterns'),
+    array('home', 'Home'),
+    array('changepwd', 'Change pwd'),
+    array('logs', 'Logs'),
+    array('sites', 'Sites'),
     array('admin', '管理入口'),
-    array('signout', '退出登录')
+    array('signout', 'Sign out')
   );
   $visible_entries = array();
   foreach($entries as $entry){
@@ -58,8 +53,8 @@
   }
 
   $admin_entries = array(
-    array('users', '用户管理'),
-    array('options', '网站设置')
+    array('users', 'Sites'),
+    array('options', 'Settings')
   );
   $visible_admin_entries = array();
   foreach($admin_entries as $entry){
@@ -98,7 +93,7 @@
           
           <div class="hidden-xs hidden-sm col-md-2 col-lg-2">
             <div class="panel panel-default">
-              <div class="panel-heading">功能列表</div>
+              <div class="panel-heading">Menubar</div>
               <ul class="nav nav-pills nav-stacked panel-body">
                 <?php foreach($visible_entries as $entry){ ?>
                 <li role="presentation" <?php if($page_type==$entry[0])echo 'class="disabled"'; ?> >
@@ -112,7 +107,7 @@
           <div class="col-xs-12 col-sm-12 col-md-10 col-lg-10">
             <div class="visible-xs visible-sm">
               <div class=" panel panel-default">
-                <div class="panel-heading">功能列表</div>
+                <div class="panel-heading">Menubar</div>
                 <ul class="nav nav-pills panel-body">
                   <?php foreach($visible_entries as $entry){ ?>
                   <li role="presentation" <?php if($page_type==$entry[0])echo 'class="disabled"'; ?> >
@@ -128,20 +123,17 @@
               <div class="panel panel-default">
                 <div class="panel-heading">Welcome</div> 
                 <div class="panel-body">
-                  欢迎回来, <?php echo htmlspecialchars($username) ?>.<br/>
-                  当前IP: &nbsp; <?=cr_get_client_ip() ?>.<br/>
-                  现在时间: &nbsp; <?php echo date('H:i:s',time()) ?>
+                  Welcome back, <?php echo htmlspecialchars($username) ?>.<br/>
+                  Curent IP: &nbsp; <?=cr_get_client_ip() ?>.<br/>
+                  Current time: &nbsp; <?php echo date('H:i:s',time()) ?>
                 </div>
               </div>
               <div class="panel panel-default">
-                <div class="panel-heading">通知</div> 
+                <div class="panel-heading">Notices</div> 
                 <div class="panel-body">
-                  <h4 class="text-info">提示</h4>
+                  <h4 class="text-info">Notice</h4>
                   <ul>
-                    <li>如果您在30分钟内没有刷新页面，会话会超时</li>
-                    <li>图片最大为2M，附件最大为16M，超出会显示“文件上传失败”或“内容不完整”的错误提示</li>
-                    <li>允许的附件格式：.rar .zip .7z .doc(x) .xls(x) .ppt(x) .pdf</li>
-                    <li>建议及时修改初始密码，不要将密码设置为简单密码</li>
+                    <li>No notice</li>
                   </ul>
                 </div>
               </div>
@@ -374,7 +366,7 @@
     <script src="static/ucenter.js"></script>
 
     <script src="//cdn.newnius.com/bootstrap-table/bootstrap-table.min.js"></script>
-    <script src="//cdn.newnius.com/bootstrap-table/locale/bootstrap-table-zh-CN.min.js"></script>
+    <script src="//cdn.newnius.com/bootstrap-table/locale/bootstrap-table-en-US.min.js"></script>
     <script src="//cdn.newnius.com/bootstrap-table/extensions/mobile/bootstrap-table-mobile.min.js"></script>
     <script src="//cdn.newnius.com/bootstrap-table/extensions/export/bootstrap-table-export.min.js"></script>
     <script src="//cdn.newnius.com/jquery-plugin-tableExport/tableExport.min.js"></script>

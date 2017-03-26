@@ -25,12 +25,14 @@
 			$res = site_gets($rule);
 			break;
 		case 'add_pattern':
-			$site = cr_get_GET('site');
-			$pattern = cr_get_GET('pattern');
+			$site = cr_get_POST('site');
+			$pattern = cr_get_POST('pattern');
 			$res = pattern_add($site, $pattern);
 			break;
 		case 'remove_pattern':
-			$res = pattern_remove(null);
+			$site = cr_get_POST('site');
+			$pattern = cr_get_POST('pattern');
+			$res = pattern_remove($site, $pattern);
 			break;
 		case 'get_patterns':
 			$rule = new CRObject();
@@ -62,8 +64,12 @@
 		}
 		return $res;
 	}
-	function pattern_remove($pattern){
-		$res['errno'] = CRErrorCode::IN_DEVELOP;
+	function pattern_remove($site, $pattern){
+		$res['errno'] = CRErrorCode::SUCCESS;
+		$success = PatternManager::remove($site, $pattern);
+		if(!$success){
+			$res['errno'] = CRErrorCode::FAIL;
+		}
 		return $res;
 	}
 	function pattern_gets($rule){
