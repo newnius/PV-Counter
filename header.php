@@ -17,14 +17,6 @@
 
 		<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 			<ul class="nav navbar-nav navbar-right">
-				<form class="navbar-form navbar-left" role="search">
-					<div class="input-group input-group">
-						<input id="input-search" type="text" class="form-control" placeholder="Search" />
-						<span class="input-group-btn">
-							<button id="btn-search" type="submit" class="btn btn-default">Search</button>
-						</span>
-					</div>
-				</form>
 			<?php if(!Session::get('username')){ ?>
 				<li><a href="https://quickauth.newnius.com/login.php?redirect=<?=BASE_URL?>/auth.php">Sign in</a></li>
 				<li><a href="https://quickauth.newnius.com/register.php?redirect=<?=BASE_URL?>/auth.php">SIgn up</a></li>

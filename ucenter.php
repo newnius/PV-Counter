@@ -11,13 +11,7 @@
 	$page_type = 'home';
 	$username = Session::get('username');
 
-	if(isset($_GET['changepwd'])){
-		$page_type='changepwd';
-  
-	}elseif(isset($_GET['users'])){
-		$page_type='users';
-  
-	}elseif(isset($_GET['logs'])){
+	if(isset($_GET['logs'])){
 		$page_type='logs';
 
 	}elseif(isset($_GET['sites'])){
@@ -41,9 +35,8 @@
 
   $entries = array(
     array('home', 'Home'),
-    array('changepwd', 'Password'),
-    array('logs', 'Logs'),
     array('sites', 'Sites'),
+    array('logs', 'Logs'),
     array('signout', 'Sign out')
   );
   $visible_entries = array();
@@ -137,40 +130,6 @@
               </div>
             </div>
       
-            <?php }elseif($page_type == 'changepwd'){ ?>
-            <div id="changepwd">
-              <div class="panel panel-default">
-                <div class="panel-heading">Change Password</div> 
-                <div class="panel-body">
-                  <div id="resetpwd">
-                    <h2>Change Password</h2>
-                    <form class="form-changepwd">
-                      <div class="form-group">
-                        <label class="sr-only" for="Old Password">Old password</label>
-                        <div class="input-group">
-                          <div class="input-group-addon">
-                            <span class="glyphicon glyphicon-lock" aria-hidden="true"></span>
-                          </div>
-                          <input type="password" class="form-control" id="oldpwd" placeholder="Current password" required />
-                        </div>
-                      </div>
-                      <div class="form-group">
-                        <label class="sr-only" for="New Password">New Password</label>
-                        <div class="input-group">
-                          <div class="input-group-addon">
-                            <span class="glyphicon glyphicon-lock" aria-hidden="true"></span>
-                          </div>
-                          <input type="password" class="form-control" id="password" placeholder="New password" required />
-                        </div>
-                      </div>
-                      <button id="btn-changepwd" class="btn btn-md btn-primary " type="submit" >Update</button>
-                      <span id="changepwd-msg" class="text-danger"></span>
-                    </form>
-                  </div>
-                </div>
-              </div>
-            </div>
-   
             <?php }elseif($page_type == 'users'){ ?>
             <div id="users">
               <div class="panel panel-default">

@@ -1,0 +1,27 @@
+body { background-color: #eee; }
+
+.footer{ text-align: center; }
+.footer ul li{ display: inline-block; }
+
+/* make sticky footer  */
+body, html{ height: 100%; }
+footer, .push{ height: 36px; }
+footer{ 
+	background: #f2f2f2;
+	margin-bottom: 0px;
+}
+.wrapper{
+	min-height: 100%;
+	margin: 0 auto -36px; /* the bottom margin is the negative value of the footer's height */
+}
+/* end */
+
+.panel-form{
+	max-width: 320px;
+	margin: 0 auto;
+}
+
+.center{
+	text-align: center;
+	margin: 0 auto;
+}
