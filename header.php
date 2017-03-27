@@ -12,7 +12,7 @@
 				<span class="icon-bar"></span>
 				<span class="icon-bar"></span>
 			</button>
-			<a class="navbar-brand" href="<?=BASE_URL?>">Analytics</a>
+			<a class="navbar-brand" href="<?=BASE_URL?>">Easy Analytics</a>
 		</div>
 
 		<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
@@ -34,7 +34,7 @@
 				<li class="dropdown">
 					<a href="javascript:void(0)" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">More<span class="caret"></span></a>
 					<ul class="dropdown-menu">
-						<li><a href="#help.php">Help</a></li>
+						<li><a href="help.php">Help</a></li>
 						<li role="separator" class="divider"></li>
 					<?php if(Session::get('username')){ ?>
 						<li><a href="<?=BASE_URL?>/ucenter.php?signout">Sign out</a></li>

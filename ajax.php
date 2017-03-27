@@ -19,6 +19,11 @@
 			$site->set('owner', Session::get('username'));
 			$res = site_add($site);
 			break;
+		case 'remove_site':
+			$site = new CRObject();
+			$site->set('site', cr_get_POST('site'));
+			$res = site_remove($site);
+			break;
 		case 'get_sites':
 			$rule = new CRObject();
 			$rule->set('owner', Session::get('username'));
@@ -84,6 +89,15 @@
 	function site_add($site){
 		$res['errno'] = CRErrorCode::SUCCESS;
 		$success = SiteManager::add($site);
+		if(!$success){
+			$res['errno'] = CRErrorCode::FAIL;
+		}
+		return $res;
+	}
+
+	function site_remove($site){
+		$res['errno'] = CRErrorCode::SUCCESS;
+		$success = SiteManager::remove($site);
 		if(!$success){
 			$res['errno'] = CRErrorCode::FAIL;
 		}

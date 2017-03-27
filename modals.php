@@ -34,12 +34,11 @@
       <div class="modal-body">
         <form id="form-site" action="javascript:void(0)">
           <label for="domain" class="sr-only">Domain</label>
-          <input type="text" id="form-site-site" class="form-group form-control " placeholder="example.com" required />
+          <input type="text" id="form-site-domain" class="form-group form-control " placeholder="example.com" required />
           <label for="port" class="sr-only">Port</label>
-          <input type="number" id="form-site-site" class="form-group form-control " placeholder="80" required />
+          <input type="number" id="form-site-port" class="form-group form-control " placeholder="80" required />
 	  			<div>
             <button id="form-site-submit" type="submit" class="btn btn-primary">Save</button>
-            <button id="form-site-delete" type="button" class="btn btn-danger">Delete</button>
 						<span id="form-site-msg" class="text-danger"></span>
           </div>
         </form>
