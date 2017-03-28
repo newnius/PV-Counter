@@ -27,7 +27,7 @@
 					<p class="center">A third party website visit count and analytics service. It's easy and amlost free to use.</p>
 					<div>
 						<h4>Include (JQuery required)</h4>
-						<pre><code class="language-markup"><?=htmlspecialchars('<script async src="//cdn.jluapp.com/ana/ea.js"></script>')?></code></pre>
+						<pre><code class="language-markup"><?=htmlspecialchars('<script async src="//cdn.newnius.com/ana/ea.js"></script>')?></code></pre>
 						<h4>Show visit count</h4>
 						<pre><code class="language-markup"><?=htmlspecialchars('Visited:<span class="cr_count_pv"></span>')?></code></pre>
 					</div>
