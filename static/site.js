@@ -76,6 +76,13 @@ function load_sites()
 			valign: 'middle',
 			sortable: false
 		}, {
+			field: 'status',
+			title: 'Status',
+			align: 'center',
+			valign: 'middle',
+			sortable: false,
+			formatter: statusFormatter
+		}, {
 			field: 'operate',
 			title: 'Operate',
 			align: 'center',
@@ -83,6 +90,18 @@ function load_sites()
 			formatter: siteOperateFormatter
 		}]
 	});
+}
+
+function statusFormatter(status)
+{
+	switch(status){
+		case '0':
+			return '<a href="javascript:void(9)">Verify</a>';
+		case '1':
+			return 'Verified';
+		default:
+			return 'Unknown';
+	}
 }
 
 function siteResponseHandler(res)

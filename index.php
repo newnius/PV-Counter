@@ -45,6 +45,6 @@
 
 		<script src="//cdn.bootcss.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 		<script src="//cdn.bootcss.com/prism/9000.0.1/prism.js"></script>
-		<script async src="//cdn.jluapp.com/ana/ea.js"></script>
+		<script async src="//cdn.newnius.com/ana/ea.js"></script>
 	</body>
 </html>

@@ -1,15 +1,16 @@
 function register_events_pattern()
 {
+	var site = getParameterByName('site');
+	var arr = site.split(":");
+	var domain = arr[0];
+	var port = 80;
+	if(arr.length==2)
+		port = arr[1];
+	$("#form-pattern-domain").val(domain);
+	$("#form-pattern-port").val(port);
+	
 	$('#btn-pattern-add').click(function(e){
 		$('#modal-pattern').modal('show');
-		var site = getParameterByName('site');
-		var arr = site.split(":");
-		var domain = arr[0];
-		var port = 80;
-		if(arr.length==2)
-			port = arr[1];
-		$("#form-pattern-domain").val(domain);
-		$("#form-pattern-port").val(port);
 	});
 
 	$("#form-pattern-submit").click(function(e){

@@ -31,7 +31,7 @@
 				 index(`owner`),
 				`site` varchar(256) not null,
 				 index(`site`),
-				`status` int not null default 0, /* 0-created, need verify, 2-normal */
+				`status` int not null default 0, /* 0-created, need verify, 2-verified */
 				`add_time` int
 			)ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE utf8mb4_general_ci',
 		);

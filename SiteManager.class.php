@@ -46,19 +46,39 @@
 			return $sites;
 		}
 
+
+		/*
+		 */
+		public static function get($rule)
+		{
+			$site = $rule->get('site');
+			$owner = $rule->get('owner');
+			$selected_rows = array('site', 'owner', 'status', 'add_time');
+			$where_arr = array('site' => '?', 'owner' => '?');
+			$params = array($site, $owner);
+			$builder = new SQLBuilder();
+			$builder->select('cr_site', $selected_rows);
+			$builder->where($where_arr);
+			$sql = $builder->build();
+			$sites = (new MysqlPDO())->executeQuery($sql, $params);
+			return count($sites)>0?$sites[0]:null;
+		}
+
+
 		/*
 		 */
 		public static function remove($site)
 		{
 			$site_s = $site->get('site');
-			$where_arr = array('site' => '?');
+			$owner = $site->get('owner');
+			$where_arr = array('site' => '?', 'owner' => '?');
 			$builder = new SQLBuilder();
 			$builder->delete('cr_site');
 			$builder->where($where_arr);
 			$sql = $builder->build();
-			$params = array( $site_s );
+			$params = array( $site_s, $owner );
 			$count = (new MysqlPDO())->execute($sql, $params);
-			return $count===1;
+			return $count>0;
 		}
 
 
@@ -67,16 +87,17 @@
 		public function update($site)
 		{
 			$site_s = $site->get('site');
+			$owner = $site->get('owner');
 			$status = $site->getInt('status');
 
 			$key_values = array('status' => '?');
-			$where_arr = array('site'=>'?');
+			$where_arr = array('site'=>'?', 'owner' => '?');
 
 			$builder = new SQLBuilder();
 			$builder->update('cr_site', $key_values);
 			$sql = $builder->where($where_arr);
 			$sql = $builder->build();
-			$params = array( $status, $site_s );
+			$params = array( $status, $site_s, $owner );
 			$count = (new MysqlPDO())->execute($sql, $params);
 			return $count===1;
 		}

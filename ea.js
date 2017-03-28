@@ -1,6 +1,6 @@
 $(function(){
 	var ajax = $.ajax({
-		url: "//192.168.56.105/ana/hi.php",
+		url: "//cdn.newnius.com/ana/hi.php",
 		type: 'GET',
 		dataType: "jsonp",
 		data:{ }

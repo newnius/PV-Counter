@@ -12,93 +12,71 @@
 		const UNKNOWN_REQUEST = 6;
 		const CAN_NOT_BE_EMPTY = 7;
 		const INCOMPLETE_CONTENT = 8;
-		const FILE_NOT_UPLOADED = 9;
 		const RECORD_NOT_EXIST = 10;
-		const INVALID_PASSWORD = 11;
 		const UNABLE_TO_CONNECT_REDIS = 12;	
 		const UNABLE_TO_CONNECT_MYSQL = 13;	
 
 		/* user */
-		const USERNAME_OCCUPIED = 14;
-		const EMAIL_OCCUPIED = 15;
-		const INVALID_USERNAME = 16;
-		const INVALID_EMAIL = 17;
-		const WRONG_PASSWORD = 18;
 		const NOT_LOGED = 19;
 		const USER_NOT_EXIST = 20;
 		const USER_IS_BLOCKED = 21;
 
+		const NEED_VERIFY = 22;
+		const INVALID_PATTERN = 23;
+		const RECORD_ALREADY_EXIST = 24;
 
 		public static function getErrorMsg($errno){
 			switch($errno){
 				case CRErrorCode::SUCCESS:
-					return '成功';
-
-				case CRErrorCode::USERNAME_OCCUPIED:
-					return '用户名已存在！';
-
-				case CRErrorCode::EMAIL_OCCUPIED:
-					return '邮箱已存在！';
+					return 'Success!';
 
 				case CRErrorCode::NO_PRIVILEGE:
-					return '您没有权限执行此项操作（可能是由于会话超时，需要重新登录）！';
-
-				case CRErrorCode::INVALID_USERNAME:
-					return '无效的用户名！';
-
-				case CRErrorCode::INVALID_EMAIL:
-					return '无效的邮箱！';
+					return 'You don\'t have privilege to do this!';
 
 				case CRErrorCode::UNKNOWN_ERROR:
-					return '未知错误！';
-
-				case CRErrorCode::WRONG_PASSWORD:
-					return '密码错误！';
+					return 'Unknown error occured!';
 
 				case CRErrorCode::IN_DEVELOP:
-					return '功能开发中！';
+					return 'In develop!';
 
 				case CRErrorCode::UNABLE_TO_CONNECT_REDIS:
-					return '连接Redis数据库错误！';
+					return 'Unable to connect to Redis!';
 
 				case CRErrorCode::UNABLE_TO_CONNECT_MYSQL:
-					return '连接Mysql数据库错误！';
+					return 'Unable to connect to Mysql!';
 
 				case CRErrorCode::NOT_LOGED:
-					return '您尚未登录！';
-
-				case CRErrorCode::USER_NOT_EXIST:
-					return '用户不存在！';
+					return 'You have to sign in to continue!';
 
 				case CRErrorCode::INVALID_REQUEST:
-					return '不合理的请求！';
+					return 'Invalid Request!';
 
 				case CRErrorCode::UNKNOWN_REQUEST:
-					return '未知的请求！';
+					return 'Unknown Request!';
 
 				case CRErrorCode::CAN_NOT_BE_EMPTY:
-					return '不能为空！';
+					return 'Can not be empty!';
 
 				case CRErrorCode::FAIL:
-					return '操作失败！';
-
-				case CRErrorCode::INCOMPLETE_CONTENT:
-					return '内容不完整，存在未填项！';
-
-				case CRErrorCode::FILE_NOT_UPLOADED:
-					return '文件上传失败！';
+					return 'Operation failed!';
 
 				case CRErrorCode::RECORD_NOT_EXIST:
-					return '该条记录未找到！';
+					return 'Record not found!';
 
 				case CRErrorCode::USER_IS_BLOCKED:
-					return '该用户已被锁定！';
+					return 'Account have been blocked!';
 
-				case CRErrorCode::INVALID_PASSWORD:
-					return '无效的密码！';
+				case CRErrorCode::NEED_VERIFY:
+					return 'You have to verify this first!';
+
+				case CRErrorCode::INVALID_PATTERN:
+					return 'Invalid pattern!';
+
+				case CRErrorCode::RECORD_ALREADY_EXIST:
+					return 'Record has already been created!!';
 
 				default:
-					return '未知错误！('.$errno.')';
+					return 'Unknown error ('.$errno.')';
 			}
 		}
 	}

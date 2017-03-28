@@ -1,4 +1,5 @@
 <?php
+	require_once('predis/autoload.php');
 	require_once('util4p/RedisDAO.class.php');
 	require_once('util4p/CRObject.class.php');
 
