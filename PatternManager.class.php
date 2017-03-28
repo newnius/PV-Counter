@@ -9,9 +9,8 @@
 		/* pattern sample: /view.php?id=? */
 		public static function save($site, $pattern){
 			$arr = parse_url('http://example.com'.$pattern);
-			//var_dump($arr);
-			if(!isset($arr['path']))return 0;// must set
-			if(!isset($arr['query']))return 0;// no need to add pattern
+			if(!isset($arr['path']))return false;// must set
+			if(!isset($arr['query']))return false;// no need to add pattern
 			$redis = RedisDAO::instance();
 			if($redis===null)return false;
 			$scope = 'pattern_'.base64_encode($site);
@@ -27,6 +26,7 @@
 
 		public static function gets($rule){
 			$site = $rule->get('site');
+			if($site===null)return array();
 			$scope = 'pattern_'.base64_encode($site);
 			$redis = RedisDAO::instance();
 			if($redis===null)return array();
@@ -39,8 +39,8 @@
 				return null;
 			}
 			$arr = parse_url($url);
-			if(!isset($arr['path']))return 0;// must set
-			if(!isset($arr['query']))return 0;// no need to add pattern
+			if(!isset($arr['path']))return null;// must set
+			if(!isset($arr['query']))return null;// no need to add pattern
 
 			$rule = new CRObject();
 			$rule->set('site', $site);
@@ -63,5 +63,3 @@
 		}
 
 	}
-
-

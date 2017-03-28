@@ -12,6 +12,7 @@
 	define('REDIS_SCHEME', 'tcp');
 	define('REDIS_HOST', '192.168.56.110');
 	define('REDIS_PORT', 6379);
+	define('REDIS_SHOW_ERROR', false);
 
 	define('WEBROOT', __DIR__);
 

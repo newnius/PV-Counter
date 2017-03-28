@@ -25,6 +25,7 @@
 		$config->set('scheme', REDIS_SCHEME);
 		$config->set('host', REDIS_HOST);
 		$config->set('port', REDIS_PORT);
+		$config->set('show_error', REDIS_SHOW_ERROR);
 		RedisDAO::configure($config);
 	}
 

@@ -1,7 +1,7 @@
 <?php
-	//var_dump($_SERVER);
-	require_once('util4p/util.php');
+	require_once('config.inc.php');
 	require_once('predis/autoload.php');
+	require_once('util4p/util.php');
 	require_once('util4p/RedisDAO.class.php');
 	require_once('util4p/CRObject.class.php');
 	require_once('PatternManager.class.php');
@@ -34,9 +34,7 @@
 	if(isset($arr['port']))
 		$site .= ':'.$arr['port'];
 	
-//$pattern = '/jlucqe/view.php?ID=?&SID=?';
-//PatternManager::save($site, $pattern);
-
+	$page = $arr['path'];
 
 	$pattern = PatternManager::get_match_pattern($site, $refer);
 
@@ -50,8 +48,6 @@
 		}
 		$page = $arr['path'].'?';
 		$page .= http_build_query($tmp_arr);
-	}else{
-		$page = $arr['path'];
 	}
 	
 	$redis = RedisDAO::instance();
