@@ -33,8 +33,11 @@
 					</div>
 					<div>
 						<h4>Demo</h4>
-						<h4>Visited: <span class="cr_count_pv"></span></h4>
-						<h4>Visited(All pages): <span class="cr_count_site_pv"></span></h4>
+						<h4>PV: <span class="cr_count_pv"></span></h4>
+						<h4>PV(Whole site): <span class="cr_count_site_pv"></span></h4>
+						<h4>PV(Whole site, 24h): <span class="cr_count_site_pv_24h"></span></h4>
+						<h4>VV(Whole site): <span class="cr_count_vv"></span></h4>
+						<h4>VV(Whole site, 24h): <span class="cr_count_vv_24h"></span></h4>
 					</div>
 				</div>
 			</div> <!-- /container -->

@@ -14,8 +14,14 @@ $(function(){
 		$(".cr_count_site_pv").each(function(){
 			$(this).text(json.site_pv);
 		});
-		$(".cr_count_site_vv").each(function(){
-			$(this).text(json.site_vv);
+		$(".cr_count_site_pv_24h").each(function(){
+			$(this).text(json.site_pv_24h);
+		});
+		$(".cr_count_vv").each(function(){
+			$(this).text(json.vv);
+		});
+		$(".cr_count_vv_24h").each(function(){
+			$(this).text(json.vv_24h);
 		});
 	});
 });

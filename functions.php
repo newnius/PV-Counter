@@ -3,6 +3,7 @@
 	require_once('util4p/util.php');
 	require_once('util4p/CRObject.class.php');
 	require_once('util4p/CRErrorCode.class.php');
+	require_once('util4p/Random.class.php');
 	require_once('PatternManager.class.php');
 	require_once('SiteManager.class.php');
 	require_once('init.inc.php');
@@ -125,5 +126,18 @@
 		if($res['sites']===null){
 			$res['errno'] = CRErrorCode::FAIL;
 		}
+		return $res;
+	}
+
+	function site_verify_token_get($site)
+	{
+		$res['errno'] = CRErrorCode::SUCCESS;
+		$res['token'] = Random::randomString(18).'.txt';
+		return $res;
+	}
+
+	function site_verify($site)
+	{
+		$res['errno'] = CRErrorCode::IN_DEVELOP;
 		return $res;
 	}

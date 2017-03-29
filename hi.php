@@ -16,7 +16,8 @@
 	$res = array(
 		'pv' => '-1',
 		'site_pv' => '-1',
-		'site_vv' => '-1'
+		'vv' => '-1',
+		'vv_24h' => '-1'
 	);
 
 
@@ -58,9 +59,19 @@
 	$res['pv'] = $redis->hincrby($scope, 'pv_'.base64_encode($page), 1);
 	$res['page'] = $page;
 
+	
 	$res['site_pv'] = $redis->hincrby($scope, '_SITE_PV_', 1);
 	
+	$tomorrow_morning = mktime(0, 0, 0, date('n'), date('j')+1);
 
+	$site_pv_24h_key = 'SITE_PV_24H_'.$tomorrow_morning.'_'.$scope;
+	$res['site_pv_24h'] = $redis->incr($site_pv_24h_key);
+	$redis->expire($site_pv_24h_key, $tomorrow_morning-time());
+
+
+	
+	/* get vv and vv_24h */
+	$vv_24h_key = 'VV_24H_'.$tomorrow_morning.'_'.$scope;
 	$referrer = cr_get_GET('ref', '');
 	$referrer = urldecode($referrer);
 	if(filter_var($referrer, FILTER_VALIDATE_URL) !== FALSE){
@@ -72,13 +83,19 @@
 			if(!isset($arr_origin['port']))
 				$arr_origin['port'] = 80;
 			if($arr_ref['port'] === $arr_origin['port']){
-				$res['site_vv'] = $redis->hget($scope, '_SITE_VV_');
+				$res['vv'] = $redis->hget($scope, '_VV_');
+				$res['vv_24h'] = $redis->get($vv_24h_key);
 			}
 		}
 	}
-	if($res['site_vv']==='-1'){
-		$res['site_vv'] = $redis->hincrby($scope, '_SITE_VV_', 1);
+	if($res['vv']==='-1' || $res['vv']===null){
+		$res['vv'] = $redis->hincrby($scope, '_VV_', 1);
 	}
+	if($res['vv_24h']==='-1' || $res['vv_24h']===null){
+		$res['vv_24h'] = $redis->incr($vv_24h_key);
+		$redis->expire($vv_24h_key, $tomorrow_morning-time());
+	}
+	/* end */
 
 
 	$json = json_encode($res);

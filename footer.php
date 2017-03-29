@@ -9,7 +9,7 @@
 			<li><a href="help.php?footer">Help</a></li>
 			<li><a href="help.php#qid-1">About</a></li>
 			<li><i class="glyphicon glyphicon-eye-open" aria-hidden="true">PV:<span class="cr_count_site_pv"></span></i></li>
-			<li><i class="glyphicon glyphicon-user" aria-hidden="true">PV:<span class="cr_count_site_vv"></span></i></li>
+			<li><i class="glyphicon glyphicon-user" aria-hidden="true">VV:<span class="cr_count_vv"></span></i></li>
 		</ul>
 	</div>
 </footer>
