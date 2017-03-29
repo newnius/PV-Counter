@@ -63,6 +63,5 @@
 		<?php require_once('footer.php'); ?>
 		<script src="script.js"></script>
 		<script src="//cdn.bootcss.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
-		<script async src="//cdn.newnius.com/ana/ea.js"></script>
 	</body>
 </html>

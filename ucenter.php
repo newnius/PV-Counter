@@ -199,6 +199,5 @@
 		<script src="//cdn.bootcss.com/TableExport/3.3.9/js/tableexport.min.js"></script>
 		<script src="//cdn.bootcss.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 		<script src="//cdn.bootcss.com/jqueryui/1.11.4/jquery-ui.js"></script> 
-		<script async src="//cdn.newnius.com/ana/ea.js"></script>
 	</body>
 </html>

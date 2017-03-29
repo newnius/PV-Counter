@@ -53,7 +53,7 @@
 		execute_sqls($sqls);
 	}
 
-	function create_tables_log()
+	function create_table_log()
 	{
 		$sqls = array(
 			'DROP `cr_log`' => 'DROP TABLE IF EXISTS `cr_log`',
