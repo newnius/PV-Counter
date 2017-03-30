@@ -131,13 +131,52 @@
 
 	function site_verify_token_get($site)
 	{
+		if($site===null){
+			$res['errno'] = CRErrorCode::CAN_NOT_BE_EMPTY;
+			return $res;
+		}
 		$res['errno'] = CRErrorCode::SUCCESS;
 		$res['token'] = Random::randomString(18).'.txt';
+		Session::put('token_'.$site, $res['token']);
 		return $res;
 	}
 
 	function site_verify($site)
 	{
-		$res['errno'] = CRErrorCode::IN_DEVELOP;
+		$rule = new CRObject();
+		$rule->set('site', $site);
+		$rule->set('owner', Session::get('username'));
+		$site_tmp = SiteManager::get($rule);
+		if($site_tmp===null){
+			$res['errno'] = CRErrorCode::RECORD_NOT_EXIST;
+			return $res;
+		}
+		$token = Session::get('token_'.$site);
+		if($token===null){
+			$res['errno'] = CRErrorCode::FAIL;
+			return $res;
+		}
+		$url = 'http://'.$site.'/'.$token;
+		$response = cr_curl($url);
+		if($response['err']){
+			$res['errno'] = CRErrorCode::FAIL;
+			$res['msg'] = $response['err'];
+			return $res;
+		}
+		if($response['headers']['http_code'] !== 200){
+			$res['errno'] = CRErrorCode::FAIL;
+			$res['msg'] = 'Server returns: '.$response['headers']['http_code'];
+			return $res;
+		}
+		$site_arr = new CRObject();
+		$site_arr->set('site', $site);
+		$site_arr->set('owner', $rule->get('owner'));
+		$site_arr->set('status', 1);
+		
+		$success = SiteManager::update($site_arr);
+		if(!$success){
+			$res['errno'] = CRErrorCode::FAIL;
+		}
+		$res['errno'] = CRErrorCode::SUCCESS;
 		return $res;
 	}

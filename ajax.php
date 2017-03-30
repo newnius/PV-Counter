@@ -46,7 +46,7 @@
 			$res = pattern_gets($rule);
 			break;
 		case 'get_verify_site_token':
-			$site = cr_get_POST('site');
+			$site = cr_get_GET('site');
 			$res = site_verify_token_get($site);
 			break;
 		case 'verify_site':

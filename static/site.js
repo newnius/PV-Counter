@@ -39,6 +39,7 @@ function register_events_site()
 
 	$("#btn-verify-site").click(function(e){
 		$("#btn-verify-site").attr("disabled", "disabled");
+		$("#verify-site-msg").text('Pending...');
 		var site = $("#input-verify-site").val();
 		var ajax = $.ajax({
 			url: "ajax.php?action=verify_site",
@@ -49,6 +50,7 @@ function register_events_site()
 			var res = JSON.parse(json);
 			if(res["errno"] == 0){
 				$('#modal-verify-site').modal('hide');
+				$('#table-site').bootstrapTable("refresh");
 			}else{
 				$("#verify-site-msg").text(res["msg"]);
 				$("#modal-verify-site").effect("shake");
