@@ -163,9 +163,9 @@
 			$res['msg'] = $response['err'];
 			return $res;
 		}
-		if($response['headers']['http_code'] !== 200){
+		if($response['info']['http_code'] !== 200){
 			$res['errno'] = CRErrorCode::FAIL;
-			$res['msg'] = 'Server returns: '.$response['headers']['http_code'];
+			$res['msg'] = 'Server returns: '.$response['info']['http_code'];
 			return $res;
 		}
 		$site_arr = new CRObject();
