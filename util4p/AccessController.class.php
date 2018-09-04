@@ -1,26 +1,34 @@
 <?php
 
-	class AccessController
+class AccessController
+{
+	private static $rules_array = array();
+
+	/*
+	 * set privilege bitmap
+	 * sample $map = array(
+	 *	'post.add' => array('Admin', 'Moderator', 'User'),
+	 *	'post.comment' => array'Admin', 'Moderator', 'User'),
+	 *	'post.pin' => array('Admin', 'Moderator'),
+	 *	'user.block' => array('Admin')
+	 * );
+	 */
+	public static function setMap(array $map)
 	{
-		// $operation => arrayof roles
-		private static $rules_array = array(
-			/* user */
-			'user_add' => array('root', 'admin'),
-			'user_get' => array('root', 'admin', 'reviewer', 'teacher'),
-			'user_update_self' => array('root', 'admin', 'reviewer', 'teacher'),
-			'user_update' => array('root'),
-			'user_delete' => array('root'),
-		);
-
-		
-		public static function hasAccess($role, $operation)
-		{
-			//echo "Calling hasAccess($role, $operation)\n";
-			if(array_key_exists($operation, self::$rules_array))
-			{
-				return in_array($role, self::$rules_array[$operation]);
-			}
-			return false;
+		if (is_array($map)) {
+			self::$rules_array = $map;
 		}
+	}
 
-  }
+	/*
+	 * AccessController::hasAccess('Moderator', 'user.block');
+	 */
+	public static function hasAccess($role, $operation)
+	{
+		if (array_key_exists($operation, self::$rules_array)) {
+			return in_array($role, self::$rules_array[$operation]);
+		}
+		return false;
+	}
+
+}
