@@ -60,7 +60,7 @@ function get_page($url)
 
 /* default response */
 $res = array(
-	'errno' => Code::FAIL,
+	'errno' => Code::SUCCESS,
 	'page' => '',
 
 	'pv' => '99+',
@@ -113,13 +113,14 @@ if ($uri_ref !== false && $uri_origin !== false && isset($uri_ref['host']) && is
 $VV_count = Counter::VV_count($domain, $page, $increment);
 
 /* UV */
+/* TODO use another to determine unique view */
 $tomorrow_morning = mktime(0, 0, 0, date('n'), date('j') + 1);
 $increment = 0;
-if(!isset($_COOKIE['_uv'])){
+if (!isset($_COOKIE['_uv']) || $_COOKIE['_uv'] !== $domain) {
 	$increment = 1;
 }
-if (!isset($_COOKIE['_uv'])) {
-	setcookie('_uv', 'Hello World !', $tomorrow_morning);
+if (!isset($_COOKIE['_uv']) || $_COOKIE['_uv'] !== $domain) {
+	setcookie('_uv', $domain, $tomorrow_morning);
 }
 $UV_count = Counter::UV_count($domain, $page, $increment);
 
