@@ -6,3 +6,8 @@ test.php
 # IntelliJ
 .idea/
 *.iml
+
+# MacOS
+.DS_Store
+
+# Vim

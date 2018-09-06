@@ -1,105 +1,134 @@
 <?php
-	require_once('config.inc.php');
-	require_once('predis/autoload.php');
-	require_once('util4p/util.php');
-	require_once('util4p/RedisDAO.class.php');
-	require_once('util4p/CRObject.class.php');
-	require_once('PatternManager.class.php');
-	require_once('init.inc.php');
+require_once('predis/autoload.php');
+require_once('util4p/util.php');
+require_once('util4p/RedisDAO.class.php');
+require_once('util4p/CRObject.class.php');
 
-	$ua = cr_get_SERVER('HTTP_USER_AGENT');
-	$url = cr_get_SERVER('HTTP_REFERER');
-	$accept_language = cr_get_SERVER('HTTP_ACCEPT_LANGUAGE');
-	$client_ip = cr_get_client_ip();
+require_once('util4p/Random.class.php');
 
-
-	$res = array(
-		'pv' => '-1',
-		'site_pv' => '-1',
-		'vv' => '-1',
-		'vv_24h' => '-1'
-	);
+require_once('Code.class.php');
+require_once('Counter.class.php');
+require_once('PatternManager.class.php');
+require_once('config.inc.php');
+require_once('init.inc.php');
 
 
+session_start();
 
-	if(filter_var($url, FILTER_VALIDATE_URL) === FALSE)
-	{
-  	echo "invalid url\n";
-		exit;
+$url = (isset($_SERVER['HTTP_REFERER'])) ? $_SERVER['HTTP_REFERER'] : '';
+
+$client_ip = cr_get_client_ip();
+
+
+function get_domain($url)
+{
+	$uri = parse_url($url);
+
+	if ($uri === false || !isset($uri['host'])) {
+		return false;
 	}
+	$domain = $uri['host'];
+	if (isset($arr['port'])) {
+		$domain .= ':' . $uri['port'];
+	}
+	return $domain;
+}
 
-	$arr = parse_url($url);
+function get_page($url)
+{
+	$uri = parse_url($url);
+	$domain = get_domain($url);
+	/* get related pattern */
+	$pattern = PatternManager::get_match_pattern($domain, $url);
 
-	$site = '';
-	if(isset($arr['host']))
-		$site .= $arr['host'];
-	if(isset($arr['port']))
-		$site .= ':'.$arr['port'];
-	
-	$page = $arr['path'];
-
-	$pattern = PatternManager::get_match_pattern($site, $url);
-
-	if($pattern !== null){
-		$pattern_url = parse_url('http://'.$site.$pattern);
+	/* build url*/
+	$page = $uri['path'];
+	if ($pattern !== null) {
+		$pattern_url = parse_url('http://' . $domain . $pattern);
 		parse_str($pattern_url['query'], $tmp_arr_1);
-		parse_str($arr['query'], $tmp_arr_2);
+		parse_str($uri['query'], $tmp_arr_2);
 		$tmp_arr = array();
-		foreach(array_keys($tmp_arr_1) as $key){
+		foreach (array_keys($tmp_arr_1) as $key) {
 			$tmp_arr[$key] = $tmp_arr_2[$key];
 		}
-		$page = $arr['path'].'?';
+		$page = $uri['path'] . '?';
 		$page .= http_build_query($tmp_arr);
 	}
-	
-	$redis = RedisDAO::instance();
-	if($redis===null)exit;
-
-	$scope = 'site_'.base64_encode($site);
-	$res['pv'] = $redis->hincrby($scope, 'pv_'.base64_encode($page), 1);
-	$res['page'] = $page;
-
-	
-	$res['site_pv'] = $redis->hincrby($scope, '_SITE_PV_', 1);
-	
-	$tomorrow_morning = mktime(0, 0, 0, date('n'), date('j')+1);
-
-	$site_pv_24h_key = 'SITE_PV_24H_'.$tomorrow_morning.'_'.$scope;
-	$res['site_pv_24h'] = $redis->incr($site_pv_24h_key);
-	$redis->expire($site_pv_24h_key, $tomorrow_morning-time());
+	return $page;
+}
 
 
-	
-	/* get vv and vv_24h */
-	$vv_24h_key = 'VV_24H_'.$tomorrow_morning.'_'.$scope;
-	$referrer = cr_get_GET('ref', '');
-	$referrer = urldecode($referrer);
-	if(filter_var($referrer, FILTER_VALIDATE_URL) !== FALSE){
-		$arr_ref = parse_url($referrer);
-		$arr_origin = parse_url($url);
-		if($arr_ref['host'] === $arr_origin['host']){
-			if(!isset($arr_ref['port']))
-				$arr_ref['port'] = 80;
-			if(!isset($arr_origin['port']))
-				$arr_origin['port'] = 80;
-			if($arr_ref['port'] === $arr_origin['port']){
-				$res['vv'] = $redis->hget($scope, '_VV_');
-				$res['vv_24h'] = $redis->get($vv_24h_key);
-			}
-		}
+/* default response */
+$res = array(
+	'errno' => Code::FAIL,
+	'page' => '',
+
+	'pv' => '99+',
+	'site_pv' => '99+',
+	'site_pv_24h' => '99+',
+
+	'site_vv' => '99+',
+	'site_vv_24h' => '99+',
+
+	'site_uv' => '99+',
+	'site_uv_24h' => '99+'
+);
+
+/* validate url */
+if (filter_var($url, FILTER_VALIDATE_URL) === FALSE) {
+	$res['errno'] = Code::INVALID_DOMAIN;
+	exit;
+}
+
+
+$domain = get_domain($url);
+$page = get_page($url);
+
+$res['page'] = $page;
+
+/* count */
+$redis = RedisDAO::instance();
+if ($redis === null) {
+	$res['errno'] = Code::UNABLE_TO_CONNECT_REDIS;
+	exit;
+}
+
+
+$PV_count = Counter::PV_count($domain, $page, 1);
+
+/* VV */
+$increment = 1;
+
+$referrer = cr_get_GET('ref', '');
+$referrer = urldecode($referrer);
+
+$uri_ref = parse_url($referrer);
+$uri_origin = parse_url($url);
+if ($uri_ref !== false && $uri_origin !== false && isset($uri_ref['host']) && isset($uri_origin['host'])) {
+	if ($uri_ref['host'] === $uri_origin['host']) {
+		$increment = 0;
 	}
-	if($res['vv']==='-1' || $res['vv']===null){
-		$res['vv'] = $redis->hincrby($scope, '_VV_', 1);
-	}
-	if($res['vv_24h']==='-1' || $res['vv_24h']===null){
-		$res['vv_24h'] = $redis->incr($vv_24h_key);
-		$redis->expire($vv_24h_key, $tomorrow_morning-time());
-	}
-	/* end */
+}
+
+$VV_count = Counter::VV_count($domain, $page, $increment);
+
+/* UV */
+$tomorrow_morning = mktime(0, 0, 0, date('n'), date('j') + 1);
+$increment = 0;
+if(!isset($_COOKIE['_uv'])){
+	$increment = 1;
+}
+if (!isset($_COOKIE['_uv'])) {
+	setcookie('_uv', 'Hello World !', $tomorrow_morning);
+}
+$UV_count = Counter::UV_count($domain, $page, $increment);
+
+/* Combine data */
+$res = array_replace($res, $PV_count, $VV_count, $UV_count);
 
 
-	$json = json_encode($res);
-	if(isset($_GET['callback'])){
-		$json = $_GET['callback'].'('.$json.')';
-	}
-	echo $json;
+$json = json_encode($res);
+if (isset($_GET['callback'])) {
+	$json = $_GET['callback'] . '(' . $json . ')';
+}
+echo $json;
