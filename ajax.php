@@ -6,6 +6,7 @@ require_once('util4p/CRObject.class.php');
 require_once('Code.class.php');
 require_once('PatternManager.class.php');
 require_once('SiteManager.class.php');
+require_once('Securer.class.php');
 
 require_once('user.logic.php');
 require_once('site.logic.php');

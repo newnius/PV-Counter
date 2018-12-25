@@ -77,56 +77,52 @@ $res = array(
 /* validate url */
 if (filter_var($url, FILTER_VALIDATE_URL) === FALSE) {
 	$res['errno'] = Code::INVALID_DOMAIN;
-	exit;
-}
+} else {
+	$domain = get_domain($url);
+	$page = get_page($url);
 
+	$res['page'] = $page;
 
-$domain = get_domain($url);
-$page = get_page($url);
+	/* count */
+	$redis = RedisDAO::instance();
+	if ($redis === null) {
+		$res['errno'] = Code::UNABLE_TO_CONNECT_REDIS;
+	} else {
+		/* PV */
+		$PV_count = Counter::PV_count($domain, $page, 1);
 
-$res['page'] = $page;
+		/* VV */
+		$increment = 1;
 
-/* count */
-$redis = RedisDAO::instance();
-if ($redis === null) {
-	$res['errno'] = Code::UNABLE_TO_CONNECT_REDIS;
-	exit;
-}
+		$referrer = cr_get_GET('ref', '');
+		$referrer = urldecode($referrer);
 
+		$uri_ref = parse_url($referrer);
+		$uri_origin = parse_url($url);
+		if ($uri_ref !== false && $uri_origin !== false && isset($uri_ref['host']) && isset($uri_origin['host'])) {
+			if ($uri_ref['host'] === $uri_origin['host']) {
+				$increment = 0;
+			}
+		}
 
-$PV_count = Counter::PV_count($domain, $page, 1);
+		$VV_count = Counter::VV_count($domain, $page, $increment);
 
-/* VV */
-$increment = 1;
-
-$referrer = cr_get_GET('ref', '');
-$referrer = urldecode($referrer);
-
-$uri_ref = parse_url($referrer);
-$uri_origin = parse_url($url);
-if ($uri_ref !== false && $uri_origin !== false && isset($uri_ref['host']) && isset($uri_origin['host'])) {
-	if ($uri_ref['host'] === $uri_origin['host']) {
+		/* UV */
+		/* TODO use another to determine unique view */
+		$tomorrow_morning = mktime(0, 0, 0, date('n'), date('j') + 1);
 		$increment = 0;
+		if (!isset($_COOKIE['_uv']) || $_COOKIE['_uv'] !== $domain) {
+			$increment = 1;
+		}
+		if (!isset($_COOKIE['_uv']) || $_COOKIE['_uv'] !== $domain) {
+			setcookie('_uv', $domain, $tomorrow_morning);
+		}
+		$UV_count = Counter::UV_count($domain, $page, $increment);
+
+		/* Combine data */
+		$res = array_replace($res, $PV_count, $VV_count, $UV_count);
 	}
 }
-
-$VV_count = Counter::VV_count($domain, $page, $increment);
-
-/* UV */
-/* TODO use another to determine unique view */
-$tomorrow_morning = mktime(0, 0, 0, date('n'), date('j') + 1);
-$increment = 0;
-if (!isset($_COOKIE['_uv']) || $_COOKIE['_uv'] !== $domain) {
-	$increment = 1;
-}
-if (!isset($_COOKIE['_uv']) || $_COOKIE['_uv'] !== $domain) {
-	setcookie('_uv', $domain, $tomorrow_morning);
-}
-$UV_count = Counter::UV_count($domain, $page, $increment);
-
-/* Combine data */
-$res = array_replace($res, $PV_count, $VV_count, $UV_count);
-
 
 $json = json_encode($res);
 if (isset($_GET['callback'])) {

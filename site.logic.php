@@ -62,17 +62,17 @@ function site_gets(CRObject $rule)
 		$res['errno'] = Code::NOT_LOGED;
 		return $res;
 	}
-	if($rule->get('who') !== 'all'){
+	if ($rule->get('who') !== 'all') {
 		$rule->set('owner', Session::get('uid'));
 	}
-	if($rule->get('owner') === null || $rule->get('owner')!==Session::get('uid')){
-		if(!AccessController::hasAccess(Session::get('role', 'visitor'), 'site.get_others')){
+	if ($rule->get('owner') === null || $rule->get('owner') !== Session::get('uid')) {
+		if (!AccessController::hasAccess(Session::get('role', 'visitor'), 'site.get_others')) {
 			$res['errno'] = Code::NO_PRIVILEGE;
 			return $res;
 		}
 	}
 	$res['sites'] = SiteManager::gets($rule);
-	$res['errno'] = $res['sites'] === null?Code::FAIL:Code::SUCCESS;
+	$res['errno'] = $res['sites'] === null ? Code::FAIL : Code::SUCCESS;
 	return $res;
 }
 
@@ -117,6 +117,9 @@ function site_verify(CRObject $site)
 	} else if ($spider->getStatusCode() !== 200) {
 		$res['errno'] = Code::FAIL;
 		$res['msg'] = 'Server returns: ' . $spider->getStatusCode();
+	} else if ($spider->getBody() !== $filename) {
+		$res['errno'] = Code::FAIL;
+		$res['msg'] = 'Content not match';
 	} else {
 		$rule->set('verified', 1);
 		$res['errno'] = SiteManager::update($rule) ? Code::SUCCESS : Code::FAIL;

@@ -10,12 +10,12 @@
 			<div class="modal-body">
 				<form id="form-pattern" action="javascript:void(0)">
 					<label for="form-pattern-domain" class="sr-only">Domain</label>
-					<input type="text" id="form-pattern-domain" class="form-group form-control" disabled/>
+					<input type="text" id="form-pattern-domain" class="form-group form-control" readonly/>
 					<label for="form-pattern-port" class="sr-only">Port</label>
-					<input type="number" id="form-pattern-port" class="form-group form-control" disabled/>
+					<input type="number" id="form-pattern-port" class="form-group form-control" readonly/>
 					<label for="form-pattern-pattern]" class="sr-only">Pattern</label>
 					<input type="text" id="form-pattern-pattern" class="form-group form-control"
-						   placeholder="sample: /list.php?fid=3&sid=4" required>
+						   placeholder="sample: /list.php?fid=3&sid=4, must have / and query part" required>
 					<div>
 						<button id="form-pattern-submit" type="submit" class="btn btn-primary">Save</button>
 						<span id="form-pattern-msg" class="text-danger"></span>

@@ -163,6 +163,9 @@ class Code
 			case Code::NEED_VERIFY:
 				return 'You have to verify your domain first !';
 
+			case Code::INVALID_PATTERN:
+				return 'Invalid pattern !';
+
 			default:
 				return 'Unknown error(' . $errno . ') !';
 		}

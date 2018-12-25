@@ -30,12 +30,17 @@ function pattern_add($domain, $pattern)
 	} else if (filter_var('http://' . $domain . $pattern, FILTER_VALIDATE_URL) === FALSE) {
 		$res['errno'] = Code::INVALID_PATTERN;
 	} else {
-		$res['errno'] = PatternManager::save($domain, $pattern) ? Code::SUCCESS : Code::FAIL;
+		$uri = parse_url('http://' . $domain . $pattern);
+		if ($uri && isset($uri['path']) && isset($uri['query'])) {
+			$res['errno'] = PatternManager::save($domain, $pattern) ? Code::SUCCESS : Code::FAIL;
+		} else {
+			$res['errno'] = Code::INVALID_PATTERN;
+		}
 	}
 	$log = new CRObject();
 	$log->set('scope', Session::get('uid'));
 	$log->set('tag', 'pattern.add');
-	$content = array('domain' => $rule->get('domain'), 'response' => $res['errno']);
+	$content = array('domain' => $rule->get('domain'), 'pattern' => $pattern, 'response' => $res['errno']);
 	$log->set('content', json_encode($content));
 	CRLogger::log($log);
 	return $res;
@@ -63,7 +68,7 @@ function pattern_remove($domain, $pattern)
 	$log = new CRObject();
 	$log->set('scope', Session::get('uid'));
 	$log->set('tag', 'pattern.remove');
-	$content = array('domain' => $rule->get('domain'), 'response' => $res['errno']);
+	$content = array('domain' => $rule->get('domain'), 'pattern' => $pattern, 'response' => $res['errno']);
 	$log->set('content', json_encode($content));
 	CRLogger::log($log);
 	return $res;

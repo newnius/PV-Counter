@@ -109,7 +109,6 @@ foreach ($entries as $entry) {
 							<div class="panel-heading">Welcome</div>
 							<div class="panel-body">
 								Welcome back, <?php echo htmlspecialchars($nickname) ?>.<br/>
-								Current IP: &nbsp; <?= cr_get_client_ip() ?>.<br/>
 								Current time: &nbsp; <?php echo date('H:i:s', time()) ?>
 							</div>
 						</div>

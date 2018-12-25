@@ -63,7 +63,7 @@ function load_logs(scope) {
 			align: 'center',
 			valign: 'middle',
 			sortable: false,
-			visible: scope === 'all'
+			visible: true
 		}, {
 			field: 'time',
 			title: 'Time',
