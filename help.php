@@ -1,15 +1,17 @@
 <?php
-require_once('global.inc.php');
+require_once('config.inc.php');
+require_once('secure.inc.php');
 ?>
 <!DOCTYPE html>
 <html lang="en-US">
 <head>
-	<?php require_once('head.php');?>
+	<?php require('head.php'); ?>
 	<title>Manual | PV Counter</title>
 </head>
 <body>
 <div class="wrapper">
-	<?php require_once('header.php'); ?>
+	<?php require('header.php'); ?>
+	<?php require('modals.php'); ?>
 	<div class="container">
 		<div class="row">
 			<div class="col-sm-4 col-md-3 hidden-xs">
@@ -17,22 +19,22 @@ require_once('global.inc.php');
 					<div class="panel-heading">Documents</div>
 					<ul class="nav nav-pills nav-stacked panel-body">
 						<li role="presentation">
-							<a href="#qid-1">What is PV-Counter</a>
+							<a href="#about">What is PV-Counter</a>
 						</li>
 						<li role="presentation">
-							<a href="#qid-2">Easy start</a>
+							<a href="#install">Easy start</a>
 						</li>
 						<li role="presentation">
 							<a href="#qid-3">Customize url pattern</a>
 						</li>
 						<li role="presentation">
-							<a href="#qid-feedback">Feedback</a>
+							<a href="#contact">Feedback</a>
 						</li>
 					</ul>
 				</div>
 			</div>
 			<div class="col-xs-12 col-sm-8 col-md-8 col-md-offset-1 ">
-				<div id="qid-1" class="panel panel-default">
+				<div id="about" class="panel panel-default">
 					<div class="panel-heading">What is PV-Counter</div>
 					<div class="panel-body">
 						<p>PV-Counter is a light-weighted third party website page visit count service. By using
@@ -41,7 +43,7 @@ require_once('global.inc.php');
 							site.</p>
 					</div>
 				</div>
-				<div id="qid-2" class="panel panel-default">
+				<div id="install" class="panel panel-default">
 					<div class="panel-heading">Easy start</div>
 					<div class="panel-body">
 						<p>To apply PV-Counter to your website, simply add the script at the bottom,</p>
@@ -61,7 +63,7 @@ require_once('global.inc.php');
 						</p>
 					</div>
 				</div>
-				<div id="qid-feedback" class="panel panel-default">
+				<div id="contact" class="panel panel-default">
 					<div class="panel-heading">More</div>
 					<div class="panel-body">
 						<p>Thank you for using. This document has not been completed yet. If you have any problem, feel
@@ -76,6 +78,6 @@ require_once('global.inc.php');
 	<!--This div exists to avoid footer from covering main body-->
 	<div class="push"></div>
 </div>
-<?php require_once('footer.php'); ?>
+<?php require('footer.php'); ?>
 </body>
 </html>

@@ -6,6 +6,7 @@ require_once('util4p/ReSession.class.php');
 require_once('util4p/AccessController.class.php');
 
 require_once('config.inc.php');
+require_once('secure.inc.php');
 require_once('init.inc.php');
 
 
@@ -21,7 +22,7 @@ $nickname = Session::get('nickname');
 if (isset($_GET['logs'])) {
 	$page_type = 'logs';
 
-}elseif (isset($_GET['logs_all'])) {
+} elseif (isset($_GET['logs_all'])) {
 	$page_type = 'logs_all';
 
 } elseif (isset($_GET['sites'])) {
@@ -36,6 +37,8 @@ if (isset($_GET['logs'])) {
 } elseif (isset($_GET['counts'])) {
 	$page_type = 'counts';
 
+} elseif (isset($_GET['visitors'])) {
+	$page_type = 'visitors';
 }
 
 $entries = array(
@@ -43,7 +46,8 @@ $entries = array(
 	array('sites', 'Sites'),
 	array('logs', 'Logs'),
 	array('sites_all', 'Sites (All)'),
-	array('logs_all', 'Logs (All)')
+	array('logs_all', 'Logs (All)'),
+	array('visitors', 'Visitors')
 );
 $visible_entries = array();
 foreach ($entries as $entry) {
@@ -56,19 +60,18 @@ foreach ($entries as $entry) {
 <!DOCTYPE html>
 <html lang="en-US">
 <head>
-	<?php require_once('head.php');?>
+	<?php require('head.php'); ?>
 	<title>Management | PV Counter</title>
-	<link href="//cdn.bootcss.com/bootstrap-table/1.11.1/bootstrap-table.min.css" rel="stylesheet">
-
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap-table@1.12.1/dist/bootstrap-table.min.css" rel="stylesheet">
 	<script type="text/javascript">
 		var page_type = "<?=$page_type?>";
 	</script>
 </head>
 
 <body>
-<?php require_once('modals.php'); ?>
 <div class="wrapper">
-	<?php require_once('header.php'); ?>
+	<?php require('header.php'); ?>
+	<?php require('modals.php'); ?>
 	<div class="container">
 		<div class="row">
 
@@ -119,7 +122,7 @@ foreach ($entries as $entry) {
 						</div>
 					</div>
 
-				<?php } elseif ($page_type === 'sites' || $page_type==='sites_all') { ?>
+				<?php } elseif ($page_type === 'sites' || $page_type === 'sites_all') { ?>
 					<div id="sites">
 						<div class="panel panel-default">
 							<div class="panel-heading">Sites</div>
@@ -183,6 +186,34 @@ foreach ($entries as $entry) {
 							</div>
 						</div>
 					</div>
+
+				<?php } elseif ($page_type === 'visitors') { ?>
+					<div id="visitors">
+						<div class="panel panel-default">
+							<div class="panel-heading">Visitors</div>
+							<div class="panel-body">
+								<table class="table table-striped table-bordered">
+									<tr>
+										<th>PV</th>
+										<td><span class="cr_count_site_pv">Loading</span></td>
+									</tr>
+									<tr>
+										<th>UV</th>
+										<td><span class="cr_count_site_uv">Loading</span></td>
+									</tr>
+									<tr>
+										<th>PV (today)</th>
+										<td><span class="cr_count_site_pv_24h">Loading</span></td>
+									</tr>
+									<tr>
+										<th>UV (today)</th>
+										<td><span class="cr_count_site_uv_24h">Loading</span></td>
+									</tr>
+								</table>
+							</div>
+						</div>
+					</div>
+
 				<?php } ?>
 
 			</div>
@@ -192,18 +223,17 @@ foreach ($entries as $entry) {
 	<!--This div exists to avoid footer from covering main body-->
 	<div class="push"></div>
 </div>
-<?php require_once('footer.php'); ?>
+<?php require('footer.php'); ?>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap-table@1.12.1/dist/bootstrap-table.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap-table@1.12.1/dist/extensions/mobile/bootstrap-table-mobile.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap-table@1.12.1/dist/extensions/export/bootstrap-table-export.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/tableexport.jquery.plugin@1.10.1/tableExport.min.js"></script>
 
 <script src="static/site.js"></script>
 <script src="static/pattern.js"></script>
 <script src="static/count.js"></script>
 <script src="static/ucenter.js"></script>
 
-<script src="//cdn.bootcss.com/bootstrap-table/1.11.1/bootstrap-table.min.js"></script>
-<script src="//cdn.bootcss.com/bootstrap-table/1.11.1/locale/bootstrap-table-en-US.min.js"></script>
-<script src="//cdn.bootcss.com/bootstrap-table/1.11.1/extensions/mobile/bootstrap-table-mobile.min.js"></script>
-<script src="//cdn.bootcss.com/bootstrap-table/1.11.1/extensions/export/bootstrap-table-export.min.js"></script>
-<script src="//cdn.bootcss.com/TableExport/3.3.9/js/tableexport.min.js"></script>
-<script src="//cdn.bootcss.com/jqueryui/1.11.4/jquery-ui.js"></script>
 </body>
 </html>

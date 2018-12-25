@@ -19,8 +19,7 @@ class SiteManager
 		$builder->insert('ana_site', $key_values);
 		$sql = $builder->build();
 		$params = array($domain, $owner);
-		$count = (new MysqlPDO())->execute($sql, $params);
-		return $count === 1;
+		return (new MysqlPDO())->execute($sql, $params);
 	}
 
 	/* */
@@ -58,7 +57,7 @@ class SiteManager
 		$builder->where($where);
 		$sql = $builder->build();
 		$sites = (new MysqlPDO())->executeQuery($sql, $params);
-		return count($sites) > 0 ? $sites[0] : null;
+		return $sites !== null && count($sites) > 0 ? $sites[0] : null;
 	}
 
 	/* */
@@ -72,8 +71,7 @@ class SiteManager
 		$builder->where($where);
 		$sql = $builder->build();
 		$params = array($domain, $owner);
-		$count = (new MysqlPDO())->execute($sql, $params);
-		return $count > 0;
+		return (new MysqlPDO())->execute($sql, $params);
 	}
 
 	/* */
@@ -89,8 +87,7 @@ class SiteManager
 		$builder->where($where);
 		$sql = $builder->build();
 		$params = array($verified, $domain, $owner);
-		$count = (new MysqlPDO())->execute($sql, $params);
-		return $count === 1;
+		return (new MysqlPDO())->execute($sql, $params);
 	}
 
 }

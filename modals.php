@@ -86,7 +86,7 @@
 				<h4 id="modal-msg-title" class="modal-title">Notify</h4>
 			</div>
 			<div class="modal-body">
-				<h4 id="modal-msg-content" class="text-msg text-center">Hello World!</h4>
+				<h4 id="modal-msg-content" class="text-msg text-center">Loading...</h4>
 			</div>
 		</div>
 	</div>

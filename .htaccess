@@ -1,0 +1,14 @@
+RewriteEngine on 
+
+Order Allow,Deny
+Deny from 222.186.0.0/16
+Allow from all
+
+RewriteRule ^hi$ /hi.php
+RewriteRule ^service$ /ajax.php
+RewriteRule ^auth$ /auth.php
+RewriteRule ^help$ /help.php
+RewriteRule ^download$ /download.php
+RewriteRule ^ucenter$ /ucenter.php
+
+ErrorDocument 404 /404.php

@@ -7,67 +7,59 @@ function register_events_site() {
 	});
 
 	$("#form-site-submit").click(function (e) {
-		$("#form-site-submit").attr("disabled", "disabled");
+		$('#modal-site').modal('hide');
 		var domain = $("#form-site-domain").val();
 		var port = $("#form-site-port").val();
 		if (port !== "" && port !== "80")
 			domain += ":" + port;
 		var ajax = $.ajax({
-			url: "ajax.php?action=site_add",
+			url: window.config.BASE_URL + "/service?action=site_add",
 			type: 'POST',
 			data: {domain: domain}
 		});
 		ajax.done(function (res) {
-			if (res["errno"] === 0) {
-				$('#modal-site').modal('hide');
-				$('#table-site').bootstrapTable("refresh");
-			} else {
-				$("#form-site-msg").html(res["msg"]);
-				$("#modal-site").effect("shake");
+			if (res["errno"] !== 0) {
+				$('#modal-msg').modal('show');
+				$('#modal-msg-content').text(res['msg']);
 			}
-			$("#form-site-submit").removeAttr("disabled");
+			$('#table-site').bootstrapTable("refresh");
 		});
 		ajax.fail(function (jqXHR, textStatus) {
-			alert("Request failed :" + textStatus);
-			$("#form-site-submit").removeAttr("disabled");
+			$('#modal-msg').modal('show');
+			$('#modal-msg-content').text("Request failed :" + textStatus);
 		});
 	});
 
 	$("#btn-verify-site").click(function (e) {
-		$("#btn-verify-site").attr("disabled", "disabled");
-		$("#verify-site-msg").text('Pending...');
+		$('#modal-verify-site').modal('hide');
 		var domain = $("#input-verify-site").val();
 		var ajax = $.ajax({
-			url: "ajax.php?action=site_verify",
+			url: window.config.BASE_URL + "/service?action=site_verify",
 			type: 'POST',
 			data: {domain: domain}
 		});
 		ajax.done(function (res) {
-			if (res["errno"] === 0) {
-				$('#modal-verify-site').modal('hide');
-				$('#table-site').bootstrapTable("refresh");
-			} else {
-				$("#verify-site-msg").text(res["msg"]);
-				$("#modal-verify-site").effect("shake");
+			if (res["errno"] !== 0) {
+				$('#modal-msg').modal('show');
+				$('#modal-msg-content').text(res['msg']);
 			}
-			$("#btn-verify-site").removeAttr("disabled");
+			$('#table-site').bootstrapTable("refresh");
 		});
 		ajax.fail(function (jqXHR, textStatus) {
-			alert("Request failed :" + textStatus);
-			$("#btn-verify-site").removeAttr("disabled");
+			$('#modal-msg').modal('show');
+			$('#modal-msg-content').text("Request failed :" + textStatus);
 		});
 	});
 }
 
 function load_sites(scope) {
-	var $table = $("#table-site");
-	$table.bootstrapTable({
-		url: 'ajax.php?action=site_gets&who=' + scope,
+	$("#table-site").bootstrapTable({
+		url: window.config.BASE_URL + '/service?action=site_gets&who=' + scope,
 		responseHandler: siteResponseHandler,
 		cache: true,
 		striped: true,
 		pagination: false,
-		pageSize: 25,
+		pageSize: 10,
 		pageList: [10, 25, 50, 100, 200],
 		search: false,
 		showColumns: false,
@@ -91,13 +83,14 @@ function load_sites(scope) {
 			align: 'center',
 			valign: 'middle',
 			sortable: true,
-			visible: scope==='all'
+			visible: scope === 'all'
 		}, {
 			field: 'domain',
 			title: 'Domain',
 			align: 'center',
 			valign: 'middle',
-			sortable: false
+			sortable: false,
+			escape: true
 		}, {
 			field: 'verified',
 			title: 'Verified',
@@ -118,7 +111,7 @@ function load_sites(scope) {
 function statusFormatter(verified, row, index) {
 	switch (verified) {
 		case '0':
-			return '<a href="javascript:show_verify_site_modal(\'' + row.domain + '\')">Verify</a>';
+			return '<a href="javascript:show_verify_site_modal(\'' + encodeURI(row.domain) + '\')">Verify</a>';
 		case '1':
 			return 'Verified';
 		default:
@@ -130,7 +123,8 @@ function siteResponseHandler(res) {
 	if (res['errno'] === 0) {
 		return res['sites'];
 	}
-	alert(res['msg']);
+	$('#modal-msg').modal('show');
+	$('#modal-msg-content').text(res['msg']);
 	return [];
 }
 
@@ -152,26 +146,30 @@ function siteOperateFormatter(value, row, index) {
 
 window.siteOperateEvents = {
 	'click .patterns': function (e, value, row, index) {
-		window.location.href = "ucenter.php?patterns&domain=" + row.domain;
+		window.location.href = window.config.BASE_URL + "/ucenter?patterns&domain=" + row.domain;
 	},
 	'click .counts': function (e, value, row, index) {
-		window.location.href = "ucenter.php?counts&domain=" + row.domain;
+		window.location.href = window.config.BASE_URL + "/ucenter?counts&domain=" + row.domain;
 	},
 	'click .remove': function (e, value, row, index) {
 		if (!confirm('Are you sure to delete this site (permanently) ?')) {
 			return;
 		}
 		var ajax = $.ajax({
-			url: "ajax.php?action=site_remove",
+			url: window.config.BASE_URL + "/service?action=site_remove",
 			type: 'POST',
 			data: {domain: row.domain}
 		});
 		ajax.done(function (res) {
-			if (res["errno"] === 0) {
-				$('#table-site').bootstrapTable("refresh");
-			} else {
-				alert(res['msg']);
+			if (res["errno"] !== 0) {
+				$('#modal-msg').modal('show');
+				$('#modal-msg-content').text(res['msg']);
 			}
+			$('#table-site').bootstrapTable("refresh");
+		});
+		ajax.fail(function (jqXHR, textStatus) {
+			$('#modal-msg').modal('show');
+			$('#modal-msg-content').text("Request failed :" + textStatus);
 		});
 	}
 };
@@ -182,13 +180,13 @@ function show_verify_site_modal(domain) {
 	$("#verify-site-msg").text('');
 	$('#modal-verify-site').modal('show');
 	var ajax = $.ajax({
-		url: "ajax.php?action=site_get_verify_filepath",
+		url: window.config.BASE_URL + "/service?action=site_get_verify_filepath",
 		type: 'GET',
 		data: {domain: domain}
 	});
 	ajax.done(function (res) {
 		if (res["errno"] === 0) {
-			var url = '/download.php?filepath=' + res.filepath;
+			var url = window.config.BASE_URL + '/download?filepath=' + res.filepath;
 			$('#modal-verify-site-file').html('<a target="_blank" href="' + url + '">download</a>');
 			$("#input-verify-site").val(domain);
 			$("#btn-verify-site").removeAttr("disabled");

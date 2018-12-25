@@ -1,8 +1,8 @@
 $(function () {
 	var referrer = document.referrer;
 	var ajax = $.ajax({
-		//url: "https://count.newnius.com/hi.php",
-		url: "/hi.php",
+		//url: "https://count.newnius.com/hi",
+		url: window.config.BASE_URL + "/hi",
 		type: 'GET',
 		dataType: "jsonp",
 		data: {ref: referrer}

@@ -3,18 +3,17 @@ function register_events_count() {
 
 function load_counts() {
 	var domain = getParameterByName('domain');
-	var $table = $("#table-pattern");
-	$table.bootstrapTable({
-		url: 'ajax.php?action=count_gets&domain=' + domain,
+	$("#table-pattern").bootstrapTable({
+		url: window.config.BASE_URL + '/service?action=count_gets&domain=' + domain,
 		responseHandler: countResponseHandler,
 		cache: true,
 		striped: true,
-		pagination: false,
-		pageSize: 25,
+		pagination: true,
+		pageSize: 10,
 		pageList: [10, 25, 50, 100, 200],
-		search: false,
+		search: true,
 		showColumns: false,
-		showRefresh: false,
+		showRefresh: true,
 		showToggle: false,
 		showPaginationSwitch: false,
 		minimumCountColumns: 2,
@@ -39,7 +38,8 @@ function load_counts() {
 			title: 'Page',
 			align: 'center',
 			valign: 'middle',
-			sortable: true
+			sortable: true,
+			escape: true
 		}, {
 			field: 'count',
 			title: 'Count',
@@ -61,6 +61,7 @@ function countResponseHandler(res) {
 		});
 		return records;
 	}
-	alert(res['msg']);
+	$('#modal-msg').modal('show');
+	$('#modal-msg-content').text(res['msg']);
 	return [];
 }

@@ -14,10 +14,13 @@ function register_events_pattern() {
 	});
 
 	$("#form-pattern-submit").click(function (e) {
-		$("#form-pattern-submit").attr("disabled", "disabled");
 		var pattern = $("#form-pattern-pattern").val();
+		if (pattern.length === 0) {
+			return true;
+		}
+		$('#modal-pattern').modal('hide');
 		var ajax = $.ajax({
-			url: "ajax.php?action=pattern_add",
+			url: window.config.BASE_URL + "/service?action=pattern_add",
 			type: 'POST',
 			data: {
 				domain: domain,
@@ -25,32 +28,28 @@ function register_events_pattern() {
 			}
 		});
 		ajax.done(function (res) {
-			if (res["errno"] === 0) {
-				$('#modal-pattern').modal('hide');
-				$('#table-pattern').bootstrapTable("refresh");
-			} else {
-				$("#form-pattern-msg").html(res["msg"]);
-				$("#modal-pattern").effect("shake");
+			if (res["errno"] !== 0) {
+				$('#modal-msg').modal('show');
+				$('#modal-msg-content').text(res['msg']);
 			}
-			$("#form-pattern-submit").removeAttr("disabled");
+			$('#table-pattern').bootstrapTable("refresh");
 		});
 		ajax.fail(function (jqXHR, textStatus) {
-			alert("Request failed :" + textStatus);
-			$("#form-pattern-submit").removeAttr("disabled");
+			$('#modal-msg').modal('show');
+			$('#modal-msg-content').text("Request failed :" + textStatus);
 		});
 	});
 }
 
 function load_patterns() {
 	var domain = getParameterByName('domain');
-	var $table = $("#table-pattern");
-	$table.bootstrapTable({
-		url: 'ajax.php?action=pattern_gets&domain=' + domain,
+	$("#table-pattern").bootstrapTable({
+		url: window.config.BASE_URL + '/service?action=pattern_gets&domain=' + domain,
 		responseHandler: patternResponseHandler,
 		cache: true,
 		striped: true,
-		pagination: false,
-		pageSize: 25,
+		pagination: true,
+		pageSize: 10,
 		pageList: [10, 25, 50, 100, 200],
 		search: false,
 		showColumns: false,
@@ -73,7 +72,8 @@ function load_patterns() {
 			title: 'Pattern',
 			align: 'center',
 			valign: 'middle',
-			sortable: false
+			sortable: true,
+			escape: true
 		}, {
 			field: 'operate',
 			title: 'Operate',
@@ -94,7 +94,8 @@ function patternResponseHandler(res) {
 		});
 		return records;
 	}
-	alert(res['msg']);
+	$('#modal-msg').modal('show');
+	$('#modal-msg-content').text(res['msg']);
 	return [];
 }
 
@@ -117,7 +118,7 @@ window.patternOperateEvents = {
 			return;
 		}
 		var ajax = $.ajax({
-			url: "ajax.php?action=pattern_remove",
+			url: window.config.BASE_URL + "/service?action=pattern_remove",
 			type: 'POST',
 			data: {
 				domain: domain,
@@ -125,11 +126,15 @@ window.patternOperateEvents = {
 			}
 		});
 		ajax.done(function (res) {
-			if (res["errno"] === 0) {
-				$('#table-pattern').bootstrapTable("refresh");
-			} else {
-				alert(res["msg"]);
+			if (res["errno"] !== 0) {
+				$('#modal-msg').modal('show');
+				$('#modal-msg-content').text(res['msg']);
 			}
+			$('#table-pattern').bootstrapTable("refresh");
+		});
+		ajax.fail(function (jqXHR, textStatus) {
+			$('#modal-msg').modal('show');
+			$('#modal-msg-content').text("Request failed :" + textStatus);
 		});
 	}
 };

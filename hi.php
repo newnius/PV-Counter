@@ -15,7 +15,7 @@ require_once('init.inc.php');
 
 session_start();
 
-$url = (isset($_SERVER['HTTP_REFERER'])) ? $_SERVER['HTTP_REFERER'] : '';
+$url = cr_get_SERVER('HTTP_REFERER', '');
 
 $client_ip = cr_get_client_ip();
 

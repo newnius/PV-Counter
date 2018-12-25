@@ -87,6 +87,7 @@ function init_accessMap(){
 		'ucenter.logs' => array('root', 'admin', 'developer', 'normal'),
 		'ucenter.logs_all' => array('root', 'admin'),
 		'ucenter.sites_all' => array('root', 'admin'),
+		'ucenter.visitors' => array('root', 'admin'),
 	);
 	AccessController::setMap($map);
 }

@@ -8,10 +8,13 @@ A light-weighted third party website page visit count service which supports cus
   - Mysql
   
 ## Setup
+Want to deploy this service quickly? Try out this [one click setup](https://github.com/QuickDeploy/url-shortener) 
+in [QuickDeploy](https://github.com/PV-Counter).
+
   - Install requirements
   - Rename `config-sample.inc.php` to `config.inc.php`
-  - Customize `config.inc.php`
-  - Run `install.php` & __Remove__ `install.php`
+  - Customize `config.inc.php` & `static/config.js`
+  - Run `install.php` & Remove `install.php`
 
 ## Features
   - Fast & Easy to configures

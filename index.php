@@ -1,21 +1,24 @@
 <?php
-	require_once('global.inc.php');
+require_once('config.inc.php');
+require_once('secure.inc.php');
 ?>
 <!DOCTYPE html>
 <html lang="en-US">
 <head>
-	<?php require_once('head.php');?>
-	<link href="//cdn.bootcss.com/prism/9000.0.1/themes/prism.css" rel="stylesheet">
+	<?php require('head.php'); ?>
+	<link href="https://cdn.jsdelivr.net/npm/prismjs@1.15.0/themes/prism.css" rel="stylesheet">
 	<title>PV Counter | Light-weighted third party visit count service</title>
 </head>
 
 <body>
 <div class="wrapper">
-	<?php require_once('header.php'); ?>
+	<?php require('header.php'); ?>
+	<?php require('modals.php'); ?>
 	<div class="container">
 		<div class="jumbotron">
 			<h2 class="center">PV Counter</h2>
-			<p class="center">A light-weighted third party website page visit count service. It's easy and totally free to use.</p>
+			<p class="center">A light-weighted third party website page visit count service. It's easy and totally free
+				to use.</p>
 			<div>
 				<h4>Include (JQuery required)</h4>
 				<pre><code class="language-markup"><?= htmlspecialchars('<script async src="//cdn.newnius.com/ana/ea.js"></script>') ?></code></pre>
@@ -60,8 +63,8 @@
 	<!--This div exists to avoid footer from covering main body-->
 	<div class="push"></div>
 </div>
-<?php require_once('footer.php'); ?>
+<?php require('footer.php'); ?>
 
-<script src="//cdn.bootcss.com/prism/9000.0.1/prism.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/prismjs@1.15.0/prism.min.js"></script>
 </body>
 </html>

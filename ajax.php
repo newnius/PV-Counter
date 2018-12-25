@@ -19,9 +19,11 @@ require_once('init.inc.php');
 function csrf_check($action)
 {
 	/* check referer, just in case I forget to add the method to $post_methods */
-	$referer = $_SERVER['HTTP_REFERER'];
+	$referer = cr_get_SERVER('HTTP_REFERER', '');
 	$url = parse_url($referer);
-	if (isset($url['host']) && $url['host'] != $_SERVER['HTTP_HOST']) {
+	$host = isset($url['host']) ? $url['host'] : '';
+	$host .= isset($url['port']) && $url['port'] !== 80 ? ':' . $url['port'] : '';
+	if ($host !== cr_get_SERVER('HTTP_HOST')) {
 		return false;
 	}
 	$post_methods = array(
@@ -32,12 +34,8 @@ function csrf_check($action)
 		'site_verify',
 		'user_signout'
 	);
-	$csrf_token = null;
-	if(isset($_SERVER['HTTP_X_CSRF_TOKEN'])) {
-		$csrf_token = $_SERVER['HTTP_X_CSRF_TOKEN'];
-	}
 	if (in_array($action, $post_methods)) {
-		return $csrf_token !== null && isset($_COOKIE['csrf_token']) && $csrf_token === $_COOKIE['csrf_token'];
+		return Securer::validate_csrf_token();
 	}
 	return true;
 }
@@ -127,6 +125,10 @@ switch ($action) {
 		$rule->set('limit', cr_get_GET('limit'));
 		$rule->set('order', 'latest');
 		$res = log_gets($rule);
+		break;
+
+	case 'oauth_get_url':
+		$res = oauth_get_url();
 		break;
 
 	default:

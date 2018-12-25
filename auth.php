@@ -18,7 +18,7 @@ require_once('init.inc.php');
 
 //check state
 $state = cr_get_GET('state');
-if($state === null || $state !== Session::get('oauth_state')){
+if ($state === null || $state !== Session::get('oauth:state')) {
 	echo 'Auth failed, state check failed!';
 	exit;
 }
@@ -32,7 +32,7 @@ $fields = array(
 	'client_id' => $client_id,
 	'client_secret' => $client_secret,
 	'code' => $_GET['code'],
-	'redirect_uri' => BASE_URL . '/auth.php',
+	'redirect_uri' => BASE_URL . '/auth',
 );
 
 $spider = new Spider();
@@ -54,10 +54,10 @@ $response = json_decode($spider->getBody(), true);
 
 if ($response['errno'] === 0) {
 	$info = $response['info'];
-	$open_id = ($info!==null && isset($info['open_id']))?$info['open_id']:null;
-	$email = ($info!==null && isset($info['email']))?$info['email']:null;
-	$role = ($info!==null && isset($info['role']))?$info['role']:'normal';
-	$nickname = ($info!==null && isset($info['nickname']))?$info['nickname']:'u2913';
+	$open_id = ($info !== null && isset($info['open_id'])) ? $info['open_id'] : null;
+	$email = ($info !== null && isset($info['email'])) ? $info['email'] : null;
+	$role = ($info !== null && isset($info['role'])) ? $info['role'] : 'normal';
+	$nickname = ($info !== null && isset($info['nickname'])) ? $info['nickname'] : 'u2913';
 
 	$user = new CRObject();
 	$user->set('open_id', $open_id);
@@ -74,11 +74,11 @@ if ($response['errno'] === 0) {
 		$log = new CRObject();
 		$log->set('scope', $user['uid']);
 		$log->set('tag', 'user.login');
-		$content = array('uid' => $user['uid'], 'email' => $email, 'role' => $role, 'response' => $res['errno']);
+		$content = array('uid' => $user['uid'], 'response' => $res['errno']);
 		$log->set('content', json_encode($content));
 		CRLogger::log($log);
 
-		header('location: /ucenter.php');
+		header('location:' . BASE_URL . '/ucenter');
 		exit;
 	} else {
 		echo Code::getErrorMsg($res['errno']);

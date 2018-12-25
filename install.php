@@ -1,10 +1,17 @@
 <?php
 
 require_once('util4p/util.php');
+require_once('util4p/CRObject.class.php');
 require_once('util4p/MysqlPDO.class.php');
 
 require_once('config.inc.php');
 require_once('init.inc.php');
+
+
+/* show error for debug purpose */
+$config = new CRObject();
+$config->set('show_error', true);
+MysqlPDO::configure($config);
 
 
 create_table_user();
@@ -15,7 +22,8 @@ function execute_sqls($sqls)
 {
 	foreach ($sqls as $description => $sql) {
 		echo "Executing $description: ";
-		var_dump((new MysqlPDO)->execute($sql, array()));
+		$res = (new MysqlPDO)->execute($sql, array());
+		echo $res ? '<em>Success</em>' : '<em>Failed</em>';
 		echo "<hr/>";
 	}
 }
@@ -23,8 +31,7 @@ function execute_sqls($sqls)
 function create_table_user()
 {
 	$sqls = array(
-		'DROP `ana_user`' =>
-			'DROP TABLE IF EXISTS `ana_user`',
+//		'DROP `ana_user`' => 'DROP TABLE IF EXISTS `ana_user`',
 		'CREATE `ana_user`' =>
 			'CREATE TABLE `ana_user`(
 				`uid` int AUTO_INCREMENT,
@@ -42,7 +49,7 @@ function create_table_user()
 function create_table_site()
 {
 	$sqls = array(
-		'DROP `ana_site`' => 'DROP TABLE IF EXISTS `ana_site`',
+//		'DROP `ana_site`' => 'DROP TABLE IF EXISTS `ana_site`',
 		'CREATE `ana_site`' =>
 			'CREATE TABLE `ana_site`(
 				`domain` VARCHAR(64) NOT NULL,
@@ -59,7 +66,7 @@ function create_table_site()
 function create_table_log()
 {
 	$sqls = array(
-		'DROP `ana_log`' => 'DROP TABLE IF EXISTS `ana_log`',
+//		'DROP `ana_log`' => 'DROP TABLE IF EXISTS `ana_log`',
 		'CREATE `ana_log`' =>
 			'CREATE TABLE `ana_log`(
 								`id` BIGINT AUTO_INCREMENT,
