@@ -10,5 +10,7 @@ RewriteRule ^auth$ /auth.php
 RewriteRule ^help$ /help.php
 RewriteRule ^download$ /download.php
 RewriteRule ^ucenter$ /ucenter.php
+RewriteRule ^ea.js$ /ea.js.php
+RewriteRule ^ea.pure.js$ /ea.js.php
 
 ErrorDocument 404 /404.php
