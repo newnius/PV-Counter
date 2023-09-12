@@ -7,8 +7,7 @@ header('Content-Type: application/javascript');
 $(function () {
 	var referrer = document.referrer;
 	var ajax = $.ajax({
-		//url: "https://count.newnius.com/hi",
-		url: <?= BASE_URL ?> + "/hi",
+		url: "<?= BASE_URL ?>/hi",
 		type: 'GET',
 		dataType: "jsonp",
 		data: {ref: referrer}

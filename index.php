@@ -21,9 +21,9 @@ require_once('secure.inc.php');
 				to use.</p>
 			<div>
 				<h4>Include (With JQuery)</h4>
-				<pre><code class="language-markup"><?= htmlspecialchars('<script async src="' + BASE_URL + '/ea.js"></script>') ?></code></pre>
+				<pre><code class="language-markup"><?= htmlspecialchars('<script async src="'.BASE_URL.'/ea.js"></script>') ?></code></pre>
 				<h4>Include (Without JQuery)</h4>
-				<pre><code class="language-markup"><?= htmlspecialchars('<script async src="' + BASE_URL + '/ea.pure.js"></script>') ?></code></pre>
+				<pre><code class="language-markup"><?= htmlspecialchars('<script async src="'.BASE_URL.'/ea.pure.js"></script>') ?></code></pre>
 				<h4>Show visit count</h4>
 				<pre><code class="language-markup"><?= htmlspecialchars('Visits:<span class="cr_count_site_pv"></span>') ?></code></pre>
 			</div>
